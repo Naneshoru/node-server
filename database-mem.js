@@ -3,11 +3,13 @@ import { randomUUID } from 'node:crypto'
 export class DatabaseMemory {
   #videos = new Map() // # chave privada
 
-  // Estruturas de dados: Set, Map
-  // values()   [key, value]
-  // entries()  [[key, value]]
-  list() {
-    return Array.from(this.#videos.entries()).map(([id, video]) => ({ id, ...video }))
+  list(search) {
+    return Array.from(this.#videos.entries())
+      .map(([id, video]) => ({ id, ...video }))
+      .filter(video => {
+        if (!search) return true
+        return video.title.includes(search)
+      })
   }
 
   create(video) {

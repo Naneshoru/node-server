@@ -6,6 +6,10 @@ const server = fastify()
 const database = new DatabaseMemory()
 
 server.get('/videos', async (request, reply) => {
+  
+  const params = request.query.search
+  console.log(params)
+
   return reply.status(200).send(database.list())
 })
 
