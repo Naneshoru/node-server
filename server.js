@@ -1,20 +1,24 @@
 import { fastify } from 'fastify'
-import { DatabaseMemory } from './database-mem.js'
 import { DatabasePostgres } from './database-postgres.js'
+// import { DatabaseMemory } from './database-mem.js'
 
 const server = fastify()
 
-const database = new DatabaseMemory()
+// const database = new DatabaseMemory()
+const database = new DatabasePostgres()
 
 server.get('/videos', async (request, reply) => {
   const search = request.query.title
-  return reply.status(200).send(database.list(search))
+
+  const videos = await database.list(search)
+  
+  return reply.status(200).send(videos)
 })
 
 server.post('/videos', async (request, reply) => {
   const { title, description, url, duration } = request.body
 
-  database.create({
+  await database.create({
     title,
     description,
     url, 
@@ -27,7 +31,7 @@ server.post('/videos', async (request, reply) => {
 server.put('/videos/:id', async (request, reply) => {
   const { title, description, url, duration } = request.body
 
-  database.update(request.params.id, { 
+  await database.update(request.params.id, { 
     title,
     description,
     url,
@@ -39,7 +43,7 @@ server.put('/videos/:id', async (request, reply) => {
 
 server.delete('/videos/:id', async (request, reply) => {
   const id = request.params.id
-  database.delete(id)
+  await database.delete(id)
 
   return reply.status(204).send()
 })

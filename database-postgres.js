@@ -1,13 +1,12 @@
 import { randomUUID } from 'node:crypto'
+import { sql } from './db.js';
 
 export class DatabasePostgres {
-  #videos = new Map() // # chave privada
-
   list(search) {
     let videos
 
     if (search) {
-      videos = `select * from videos where title ilike "%${search}%"`
+      videos = `select * from videos where title ilike ${'%' + search + '%'}`
     } else {
       videos = 'select * from videos'
     }
