@@ -1,33 +1,50 @@
-
-// const http = require('http');
-
-// const server = http.createServer((req, res) => {
-//   console.log('URL: ', req.url)
-//   console.log('oi')
-//   res.write('Brinks')
-
-//   return res.end()
-// })
-
-// server.listen(3333, () => {
-//   console.log('Server is running on port 3333')
-// })
-
-
 import { fastify } from 'fastify'
+import { DatabaseMemory } from './database-mem.js'
 
 const server = fastify()
 
+const database = new DatabaseMemory()
+
 server.get('/', async (request, reply) => {
-  console.log('Alou')
+  return reply.status(200).send(database.list())
 })
 
-server.get('/about', async (request, reply) => {
-  console.log('Sobre')
+server.post('/videos', async (request, reply) => {
+  const { title, description, url, duration } = request.body
+
+  database.create({
+    title,
+    description,
+    url, 
+    duration
+  })
+
+  console.log(database.list())
+
+  return reply.status(201).send()
 })
 
-server.get('/node', async (request, reply) => {
-  console.log('Node')
+server.put('/videos/:id', async (request, reply) => {
+  const { title, description, url, duration } = request.body
+
+  database.update(request.params.id, { 
+    title,
+    description,
+    url,
+    duration
+  })
+
+  console.log(database.list())
+
+  return reply.status(204).send()
+})
+
+server.delete('/videos/:id', async (request, reply) => {
+  const id = request.params.id
+  database.delete(id)
+  console.log(database.list())
+
+  return reply.status(204).send()
 })
 
 server.listen({
