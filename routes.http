@@ -1,0 +1,24 @@
+POST http://localhost:3333/videos
+Content-Type: application/json
+
+{
+  "title": "John Doe",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "url": "https://www.youtube.com/watch?v=6v2L2UGZJAM",
+  "duration": 120
+}
+
+###
+PUT http://localhost:3333/videos/f22b4d6b-b52b-45ee-ade0-7565312417cc
+Content-Type: application/json
+
+{
+  "id": "1",
+  "title": "John McKenzie",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elite.",
+  "url": "https://www.youtube.com/watch?v=6v2L2UGZJAM",
+  "duration": 20
+}
+
+###
+DELETE http://localhost:3333/videos/1aadd4a5-16c0-459e-8fde-09661c91641f
