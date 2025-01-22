@@ -1,16 +1,14 @@
 import { fastify } from 'fastify'
 import { DatabaseMemory } from './database-mem.js'
+import { DatabasePostgres } from './database-postgres.js'
 
 const server = fastify()
 
 const database = new DatabaseMemory()
 
 server.get('/videos', async (request, reply) => {
-  
-  const params = request.query.search
-  console.log(params)
-
-  return reply.status(200).send(database.list())
+  const search = request.query.title
+  return reply.status(200).send(database.list(search))
 })
 
 server.post('/videos', async (request, reply) => {
@@ -47,5 +45,5 @@ server.delete('/videos/:id', async (request, reply) => {
 })
 
 server.listen({
-  port: 3333
+  port: process.env.port ?? 3333
 })
