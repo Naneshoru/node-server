@@ -5,7 +5,7 @@ const server = fastify()
 
 const database = new DatabaseMemory()
 
-server.get('/', async (request, reply) => {
+server.get('/videos', async (request, reply) => {
   return reply.status(200).send(database.list())
 })
 
@@ -18,8 +18,6 @@ server.post('/videos', async (request, reply) => {
     url, 
     duration
   })
-
-  console.log(database.list())
 
   return reply.status(201).send()
 })
@@ -34,15 +32,12 @@ server.put('/videos/:id', async (request, reply) => {
     duration
   })
 
-  console.log(database.list())
-
   return reply.status(204).send()
 })
 
 server.delete('/videos/:id', async (request, reply) => {
   const id = request.params.id
   database.delete(id)
-  console.log(database.list())
 
   return reply.status(204).send()
 })
