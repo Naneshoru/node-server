@@ -2,13 +2,12 @@ import { randomUUID } from 'node:crypto'
 import { sql } from './db.js';
 
 export class DatabasePostgres {
-  list(search) {
-    let videos
-
+  async list(search) {
     if (search) {
-      videos = `select * from videos where title ilike ${'%' + search + '%'}`
+      const videos = await sql`select title, description, duration, url from videos where title ilike ${'%' + search + '%'}`
+      return videos.length ? videos : [];
     } else {
-      videos = 'select * from videos'
+      return await sql`select title, description, duration, url from videos`
     }
   }
 

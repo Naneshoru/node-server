@@ -7,12 +7,14 @@ const server = fastify()
 // const database = new DatabaseMemory()
 const database = new DatabasePostgres()
 
-server.get('/videos', async (request, reply) => {
-  const search = request.query.title
-
-  const videos = await database.list(search)
-  
-  return reply.status(200).send(videos)
+server.get('/videos', async (request, reply) => {  
+  try {
+    const search = request.query.title
+    const videos = await database.list(search)
+    reply.send(videos)
+  } catch (error) {
+    reply.status(500).send({ error: error.message })
+  }
 })
 
 server.post('/videos', async (request, reply) => {
@@ -50,5 +52,5 @@ server.delete('/videos/:id', async (request, reply) => {
 
 server.listen({
   host: '0.0.0.0',
-  port: process.env.port ?? 3333
-})
+  port: process.env.port ?? 3333,
+}, () => console.log('listening'))
